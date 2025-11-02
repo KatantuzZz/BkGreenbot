@@ -22,3 +22,15 @@ app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
 app.run_polling()
+import json
+
+with open('data.json', 'r', encoding='utf-8') as f:
+    database = json.load(f)
+
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    query = message.text.lower()
+    response = database.get(query, "Извините, ничего не найдено.")
+    bot.send_message(message.chat.id, response)
+
+
